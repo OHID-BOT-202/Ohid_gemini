@@ -1,0 +1,157 @@
+
+
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</title>OHID AS A KING</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef2f7}
+.app{max-width:430px;margin:20px auto;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 20px #0002}
+.header{background:#1877f2;color:#fff;padding:16px;font-size:19px;font-weight:bold}
+.status{font-size:12px;font-weight:normal;margin-top:4px;opacity:.9}
+.chat{height:430px;padding:14px;overflow-y:auto}
+.msg{max-width:82%;padding:11px 14px;margin:9px 0;border-radius:16px;white-space:pre-wrap;line-height:1.45}
+.bot{background:#e4e6eb;color:#111;border-bottom-left-radius:5px}
+.user{background:#1877f2;color:#fff;margin-left:auto;border-bottom-right-radius:5px}
+.time{font-size:10px;opacity:.6;margin-top:4px;text-align:right}
+.input{display:flex;padding:12px;border-top:1px solid #ddd;gap:8px}
+input{flex:1;padding:12px;border:1px solid #ccc;border-radius:22px;outline:none}
+button{background:#1877f2;color:#fff;border:0;padding:12px 17px;border-radius:22px;cursor:pointer}
+button:disabled{opacity:.6}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    🤖 Ohid Auto Respond Web
+    <div class="status" id="status">● Super  Ohid</div>
+  </div>
+
+  <div class="chat" id="chat">
+    <div class="msg bot">
+      🤖 আসসালামু আলাইকুম! 👋
+      Ohid AI চালু হয়েছে।
+
+      💬 কিছু লিখে দেখো...
+      যেমন: হ্যালো, !welcome, !rules
+      <div class="time">Bot • এখন</div>
+    </div>
+  </div>
+
+  <div class="input">
+    <input id="message" placeholder="মেসেজ লিখুন..." />
+    <button id="send">➤</button>
+  </div>
+</div>
+
+<script>
+// এখানে নিজের Gemini API key বসাও
+const API_KEY = "AQ.Ab8RN6I0Y88AOUoGAOeC-EhpyGquMRjw15JnQx-qJW_0lmeUSg";
+
+// API key-এর নিরাপত্তার জন্য এটি শুধু demo-তে ব্যবহার করো।
+const MODEL = "gemini-2.0-flash";
+
+const input = document.getElementById("message");
+const chat = document.getElementById("chat");
+const send = document.getElementById("send");
+const status = document.getElementById("status");
+
+function addMessage(text, type) {
+  const msg = document.createElement("div");
+  msg.className = "msg " + type;
+  msg.textContent = text;
+
+  const time = document.createElement("div");
+  time.className = "time";
+  time.textContent = type === "bot" ? "Bot • এখন" : "You • এখন";
+
+  msg.appendChild(time);
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function commandReply(text) {
+  const t = text.toLowerCase().trim();
+
+  if (t === "!welcome" || t === "welcome") {
+    return "╭━━━〔 🌸 WELCOME 〕━━━╮\n\n🎉 Welcome to the group!\n\n👤 New member: @user\n\n💬 সবাই মিলে সুন্দর আড্ডা দাও।\n🤝 একে অপরকে সম্মান করো।\n\n✨ Stay active & have fun!\n\n╰━━━〔 🤖 BOT 〕━━━╯";
+  }
+
+  if (t === "!rules" || t === "rules") {
+    return "📜 Group Rules:\n\n1. সবাইকে সম্মান করো।\n2. Spam করো না।\n3. খারাপ ভাষা ব্যবহার করো না।\n4. অপ্রয়োজনীয় লিংক পাঠিও না।";
+  }
+
+  if (t === "!help" || t === "help") {
+    return "🤖 Commands:\n\n!welcome → Welcome message\n!rules → Group rules\n!help → Command list\n\n💬 সাধারণ মেসেজে Ohid AI উত্তর দেবে।";
+  }
+
+  return null;
+}
+
+async function askGemini(text) {
+  const response = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/" +
+    MODEL + ":generateContent?key=" + encodeURIComponent(API_KEY),
+    {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text:
+              "তুমি একটি বন্ধুসুলভ বাংলা Ohid premium bot। " +
+              "সংক্ষিপ্ত, ভদ্র ও স্বাভাবিক বাংলায় উত্তর দাও। " +
+              "ব্যবহারকারী লিখেছে: " + text
+          }]
+        }]
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.error?.message || "Gemini API error"
+    );
+  }
+
+  return data.candidates?.[0]?.content?.parts?.[0]?.text
+    || "দুঃখিত, এখন উত্তর দিতে পারছি না।";
+}
+
+async function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+  send.disabled = true;
+  status.textContent = "● Gemini ভাবছে...";
+
+  try {
+    const command = commandReply(text);
+    const reply = command || await askGemini(text);
+    addMessage(reply, "bot");
+  } catch (error) {
+    addMessage("⚠️ API error: " + error.message, "bot");
+  }
+
+  status.textContent = "● Ohid Bot Apps";
+  send.disabled = false;
+}
+
+send.addEventListener("click", sendMessage);
+
+input.addEventListener("keydown", function(e) {
+  if (e.key === "Enter") sendMessage();
+});
+</script>
+
+</body>
+</html>

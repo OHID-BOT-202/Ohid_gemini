@@ -2,362 +2,514 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ohid bby Ai</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ohid bby Ai</title>
 
-<style>
-*{box-sizing:border-box}
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#000;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
+    :root {
+      --rgb: #ff003c;
+    }
 
-.chat{
-  width:100%;
-  max-width:430px;
-  height:100vh;
-  max-height:750px;
-  background:#050505;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  border:1px solid #00ff88;
-  box-shadow:0 0 25px #00ff8840;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #000;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
 
-.header{
-  background:#080808;
-  color:white;
-  padding:13px 15px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border-bottom:1px solid #00ff88;
-  box-shadow:0 0 15px #00ff8840;
-}
+    .app {
+      width: 100%;
+      max-width: 500px;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
 
-.avatar{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  background:#111;
-  overflow:hidden;
-  flex-shrink:0;
-  border:2px solid #00ffff;
-  box-shadow:0 0 12px #00ffff;
-}
+      background:
+        linear-gradient(
+          rgba(0, 0, 0, 0.08),
+          rgba(0, 0, 0, 0.12)
+        ),
+        url("https://i.ibb.co.com/F4nJPjzb/file-000000008e7482118c92ba40bfa3d1fd.png");
 
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+      background-size: cover;
+      background-position: center;
+      border: 2px solid var(--rgb);
+      animation: borderRGB 0.75s linear infinite;
+    }
 
-.header h3{
-  margin:0;
-  font-size:18px;
-  color:#00ff88;
-  text-shadow:0 0 8px #00ff88;
-}
+    .header {
+      height: 70px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 15px;
+      background: rgba(0, 0, 0, 0.90);
+      border-bottom: 2px solid var(--rgb);
+      animation: borderRGB 0.75s linear infinite;
+      z-index: 5;
+    }
 
-.header small{
-  color:#00ffff;
-  text-shadow:0 0 6px #00ffff;
-}
+    .profile {
+      width: 46px;
+      height: 46px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid var(--rgb);
+      animation: borderRGB 0.75s linear infinite;
+    }
 
-.messages{
-  flex:1;
-  padding:15px;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  background:#050505;
-}
+    .header-info {
+      flex: 1;
+      min-width: 0;
+    }
 
-.message{
-  max-width:82%;
-  padding:10px 13px;
-  border-radius:12px;
-  font-size:15px;
-  line-height:1.5;
-  word-wrap:break-word;
-  white-space:pre-wrap;
-}
+    .header-info h2 {
+      margin: 0;
+      font-size: 18px;
+      color: var(--rgb);
+      animation: textRGB 0.75s linear infinite;
+    }
 
-.bot{
-  align-self:flex-start;
-  background:#062b1d;
-  color:#fff;
-  border:1px solid #00ff88;
-  border-top-left-radius:3px;
-  box-shadow:0 0 10px #00ff8840;
-}
+    .online {
+      margin-top: 4px;
+      color: #00ff66;
+      font-size: 12px;
+    }
 
-.user{
-  align-self:flex-end;
-  background:#171717;
-  color:#fff;
-  border:1px solid #ff00ff;
-  border-top-right-radius:3px;
-  box-shadow:0 0 10px #ff00ff40;
-}
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 12px 95px;
+      scroll-behavior: smooth;
+    }
 
-.time{
-  display:block;
-  font-size:10px;
-  color:#aaa;
-  text-align:right;
-  margin-top:4px;
-}
+    .chat::-webkit-scrollbar {
+      width: 4px;
+    }
 
-.bot .time{
-  color:#00ff88;
-}
+    .chat::-webkit-scrollbar-thumb {
+      background: var(--rgb);
+      border-radius: 10px;
+    }
 
-.typing{
-  display:none;
-  align-self:flex-start;
-  background:#062b1d;
-  color:#00ff88;
-  padding:10px 14px;
-  border-radius:10px;
-  font-size:13px;
-  margin:0 15px 10px;
-  border:1px solid #00ff88;
-  box-shadow:0 0 10px #00ff8840;
-}
+    .welcome {
+      margin: 20px 10px;
+      text-align: center;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.6;
+      text-shadow: 0 0 5px #000;
+    }
 
-.input-area{
-  display:flex;
-  gap:8px;
-  padding:10px;
-  background:#080808;
-  border-top:1px solid #00ffff;
-}
+    .welcome strong {
+      color: var(--rgb);
+      animation: textRGB 0.75s linear infinite;
+    }
 
-input{
-  flex:1;
-  border:1px solid #00ffff;
-  outline:none;
-  padding:13px 16px;
-  border-radius:25px;
-  font-size:15px;
-  background:#111;
-  color:white;
-  box-shadow:0 0 8px #00ffff40;
-}
+    /* Message box: শুধু RGB border, কোনো background নেই */
+    .message {
+      width: fit-content;
+      max-width: 82%;
+      margin: 10px 0;
+      padding: 11px 14px;
 
-input:focus{
-  border-color:#ff00ff;
-  box-shadow:0 0 12px #ff00ff80;
-}
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
 
-input::placeholder{
-  color:#777;
-}
+      color: #fff;
+      border: 2px solid var(--rgb);
+      border-radius: 16px;
+      box-shadow: 0 0 10px var(--rgb);
+      line-height: 1.5;
+      word-wrap: break-word;
+      text-shadow: 0 0 4px #000;
 
-button{
-  width:48px;
-  height:48px;
-  border:none;
-  border-radius:50%;
-  background:#ff003c;
-  color:white;
-  font-size:20px;
-  cursor:pointer;
-  box-shadow:0 0 12px #ff003c;
-  transition:.2s;
-}
+      animation:
+        messageIn 0.25s ease,
+        borderRGB 0.75s linear infinite;
+    }
 
-button:hover{
-  background:#ff0055;
-  box-shadow:0 0 20px #ff003c;
-}
+    .bot {
+      margin-right: auto;
+      border-top-left-radius: 4px;
+    }
 
-button:active{
-  transform:scale(.95);
-}
+    .user {
+      margin-left: auto;
+      border-top-right-radius: 4px;
+    }
 
-@media(max-width:430px){
-  .chat{
-    max-height:none;
-  }
-}
-</style>
+    .message-name {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--rgb);
+      animation: textRGB 0.75s linear infinite;
+    }
+
+    .typing {
+      display: none;
+      width: fit-content;
+      padding: 12px 16px;
+      margin: 10px 0;
+      background: transparent;
+      border: 2px solid var(--rgb);
+      border-radius: 16px;
+      box-shadow: 0 0 10px var(--rgb);
+      animation: borderRGB 0.75s linear infinite;
+    }
+
+    .typing span {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin: 0 3px;
+      border-radius: 50%;
+      background: var(--rgb);
+      animation: typing 0.5s infinite alternate;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .input-area {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.92);
+      border-top: 2px solid var(--rgb);
+      animation: borderRGB 0.75s linear infinite;
+      z-index: 5;
+    }
+
+    #messageInput {
+      flex: 1;
+      min-width: 0;
+      height: 46px;
+      padding: 0 15px;
+      outline: none;
+      background: transparent;
+      color: #fff;
+      border: 2px solid var(--rgb);
+      border-radius: 25px;
+      font-size: 15px;
+      box-shadow: 0 0 10px var(--rgb);
+      animation: borderRGB 0.75s linear infinite;
+    }
+
+    #messageInput::placeholder {
+      color: #ddd;
+    }
+
+    #sendBtn {
+      width: 48px;
+      height: 46px;
+      flex-shrink: 0;
+      border: 2px solid var(--rgb);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--rgb);
+      font-size: 21px;
+      cursor: pointer;
+      box-shadow: 0 0 14px var(--rgb);
+      animation:
+        borderRGB 0.75s linear infinite,
+        textRGB 0.75s linear infinite;
+    }
+
+    #sendBtn:active {
+      transform: scale(0.88);
+    }
+
+    @keyframes borderRGB {
+      0% {
+        border-color: #ff003c;
+        box-shadow: 0 0 12px #ff003c;
+      }
+      16% {
+        border-color: #ff00e6;
+        box-shadow: 0 0 12px #ff00e6;
+      }
+      33% {
+        border-color: #8000ff;
+        box-shadow: 0 0 12px #8000ff;
+      }
+      50% {
+        border-color: #00c8ff;
+        box-shadow: 0 0 12px #00c8ff;
+      }
+      66% {
+        border-color: #00ff66;
+        box-shadow: 0 0 12px #00ff66;
+      }
+      83% {
+        border-color: #fff000;
+        box-shadow: 0 0 12px #fff000;
+      }
+      100% {
+        border-color: #ff003c;
+        box-shadow: 0 0 12px #ff003c;
+      }
+    }
+
+    @keyframes textRGB {
+      0% { color: #ff003c; }
+      16% { color: #ff00e6; }
+      33% { color: #8000ff; }
+      50% { color: #00c8ff; }
+      66% { color: #00ff66; }
+      83% { color: #fff000; }
+      100% { color: #ff003c; }
+    }
+
+    @keyframes messageIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes typing {
+      from {
+        opacity: 0.3;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(-5px);
+      }
+    }
+
+    @media (min-width: 501px) {
+      .app {
+        height: 95vh;
+        border-radius: 18px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="chat">
+  <div class="app">
 
-  <div class="header">
-    <div class="avatar">
+    <div class="header">
       <img
+        class="profile"
         src="https://i.ibb.co/G4sHV2cW/20260822-000544.jpg"
         alt="Ohid bby Ai"
-      >
+      />
+
+      <div class="header-info">
+        <h2>Ohid bby Ai</h2>
+        <div class="online">● Online now</div>
+      </div>
     </div>
 
-    <div>
-      <h3>Ohid bby Ai</h3>
-      <small>● Online</small>
+    <div class="chat" id="chat">
+
+      <div class="welcome">
+        Welcome to <strong>Ohid bby Ai</strong><br />
+        Ohid AI-এর সাথে কথা বলো।
+      </div>
+
+      <div class="message bot">
+        <span class="message-name">Ohid bby Ai</span>
+        হাই! আমি Ohid bby Ai। তোমাকে কীভাবে সাহায্য করতে পারি?
+      </div>
+
+      <div class="typing" id="typing">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
     </div>
-  </div>
 
-  <div class="messages" id="messages">
+    <div class="input-area">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="Write a message..."
+        autocomplete="off"
+      />
 
-    <div class="message bot">
-      আসসালামু আলাইকুম! 👋
-      <br>আমি Ohid bby Ai 🤖
-      <br>আমাকে কিছু জিজ্ঞেস করো।
-      <span class="time">এখন</span>
+      <button id="sendBtn" aria-label="Send message">
+        ➤
+      </button>
     </div>
 
   </div>
 
-  <div class="typing" id="typing">
-    AI লিখছে...
-  </div>
+  <script>
+    /*
+      এখানে নিজের Gemini API key বসাও।
+      উদাহরণ:
+      const API_KEY = "AIzaSyxxxxxxxxxxxxxxxx";
+    */
+    const API_KEY = "AQ.Ab8RN6IVu4w2APHcG5h1NANcSshwVtTy0odnVWxchgA4LaY6Yg";
 
-  <div class="input-area">
-    <input
-      type="text"
-      id="input"
-      placeholder="মেসেজ লিখুন..."
-      autocomplete="off"
-    >
-    <button id="send">➤</button>
-  </div>
+    const API_URL =
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=" +
+      API_KEY;
 
-</div>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const typing = document.getElementById("typing");
 
-<script>
-/* =========================================
-   FREE.AI API KEY
-   এখানে তোমার নিজের API key বসাও
-   ========================================= */
+    const conversation = [];
 
-const API_KEY = "sk-free-92bbdc964fb8b4e77c18c40d5bc6bae07df5b20bc87abb4f";
+    function addMessage(text, type) {
+      const message = document.createElement("div");
+      message.className = "message " + type;
 
-const API_URL = "https://api.free.ai/v1/chat/";
-const MODEL = "qwen7b";
+      if (type === "bot") {
+        const name = document.createElement("span");
+        name.className = "message-name";
+        name.textContent = "Ohid bby Ai";
 
-const input = document.getElementById("input");
-const send = document.getElementById("send");
-const messages = document.getElementById("messages");
-const typing = document.getElementById("typing");
+        message.appendChild(name);
+        message.appendChild(document.createTextNode(text));
+      } else {
+        message.textContent = text;
+      }
 
-function getTime(){
-  return new Date().toLocaleTimeString("bn-BD",{
-    hour:"2-digit",
-    minute:"2-digit"
-  });
-}
-
-function addMessage(text,type){
-  const div = document.createElement("div");
-  div.className = "message " + type;
-
-  const content = document.createElement("span");
-  content.textContent = text;
-
-  const time = document.createElement("span");
-  time.className = "time";
-  time.textContent = getTime();
-
-  div.appendChild(content);
-  div.appendChild(time);
-
-  messages.appendChild(div);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-async function sendMessage(){
-
-  const text = input.value.trim();
-
-  if(!text) return;
-
-  addMessage(text,"user");
-  input.value = "";
-
-  typing.style.display = "block";
-  send.disabled = true;
-
-  try{
-
-    const response = await fetch(API_URL,{
-      method:"POST",
-
-      headers:{
-        "Authorization":"Bearer " + API_KEY,
-        "Content-Type":"application/json"
-      },
-
-      body:JSON.stringify({
-        model:MODEL,
-
-        messages:[
-          {
-            role:"system",
-            content:"You are Ohid bby Ai. Reply helpfully in Bengali when appropriate."
-          },
-          {
-            role:"user",
-            content:text
-          }
-        ]
-      })
-    });
-
-    const data = await response.json();
-
-    if(!response.ok){
-      throw new Error(
-        data.error?.message || "API request failed"
-      );
+      chat.insertBefore(message, typing);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    const reply =
-      data.choices?.[0]?.message?.content;
+    function showTyping(show) {
+      typing.style.display = show ? "block" : "none";
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-    addMessage(
-      reply || "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।",
-      "bot"
-    );
+    async function askGemini(userText) {
+      conversation.push({
+        role: "user",
+        parts: [
+          {
+            text:
+              "তুমি Ohid bby Ai নামের একটি বন্ধুসুলভ বাংলা AI assistant। " +
+              "সহজ, ভদ্র ও সংক্ষিপ্তভাবে উত্তর দাও।\n\n" +
+              userText
+          }
+        ]
+      });
 
-  }catch(error){
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contents: conversation,
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: 700
+          }
+        })
+      });
 
-    addMessage(
-      "API Error: " + error.message,
-      "bot"
-    );
+      const data = await response.json();
 
-  }finally{
+      if (!response.ok) {
+        throw new Error(
+          data.error?.message || "Gemini API request failed"
+        );
+      }
 
-    typing.style.display = "none";
-    send.disabled = false;
-    input.focus();
+      const reply =
+        data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।";
 
-  }
-}
+      conversation.push({
+        role: "model",
+        parts: [
+          {
+            text: reply
+          }
+        ]
+      });
 
-send.addEventListener("click",sendMessage);
+      return reply;
+    }
 
-input.addEventListener("keydown",function(e){
-  if(e.key === "Enter"){
-    sendMessage();
-  }
-});
-</script>
+    async function sendMessage() {
+      const text = input.value.trim();
+
+      if (!text) return;
+
+      if (API_KEY === "YOUR_GEMINI_API_KEY") {
+        addMessage(
+          "প্রথমে HTML-এর API_KEY জায়গায় নিজের Gemini API key বসাও।",
+          "bot"
+        );
+        return;
+      }
+
+      addMessage(text, "user");
+      input.value = "";
+      input.disabled = true;
+      sendBtn.disabled = true;
+
+      showTyping(true);
+
+      try {
+        const reply = await askGemini(text);
+        showTyping(false);
+        addMessage(reply, "bot");
+      } catch (error) {
+        showTyping(false);
+        addMessage(
+          "API Error: " + error.message,
+          "bot"
+        );
+      }
+
+      input.disabled = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+    sendBtn.addEventListener("click", sendMessage);
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
 
 </body>
 </html>

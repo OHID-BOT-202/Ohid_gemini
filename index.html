@@ -1,310 +1,363 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baby GPT Chat</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ohid bby Ai</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+*{box-sizing:border-box}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#000;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    .app {
-      width: 100%;
-      max-width: 520px;
-      height: 100vh;
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-      background: #050505;
-      overflow: hidden;
-    }
+.chat{
+  width:100%;
+  max-width:430px;
+  height:100vh;
+  max-height:750px;
+  background:#050505;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid #00ff88;
+  box-shadow:0 0 25px #00ff8840;
+}
 
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px;
-      background: #080808;
-      border-bottom: 1px solid #00ff66;
-      box-shadow: 0 0 18px #00ff6644;
-    }
+.header{
+  background:#080808;
+  color:white;
+  padding:13px 15px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid #00ff88;
+  box-shadow:0 0 15px #00ff8840;
+}
 
-    .profile {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #00ff66;
-      box-shadow: 0 0 15px #00ff66;
-    }
+.avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:#111;
+  overflow:hidden;
+  flex-shrink:0;
+  border:2px solid #00ffff;
+  box-shadow:0 0 12px #00ffff;
+}
 
-    .bot-name {
-      color: #00ff66;
-      font-size: 20px;
-      font-weight: bold;
-    }
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 
-    .status {
-      margin-top: 4px;
-      color: #aaa;
-      font-size: 12px;
-    }
+.header h3{
+  margin:0;
+  font-size:18px;
+  color:#00ff88;
+  text-shadow:0 0 8px #00ff88;
+}
 
-    .chat-box {
-      flex: 1;
-      overflow-y: auto;
-      padding: 18px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      scroll-behavior: smooth;
-    }
+.header small{
+  color:#00ffff;
+  text-shadow:0 0 6px #00ffff;
+}
 
-    .message {
-      max-width: 85%;
-      padding: 11px 14px;
-      border-radius: 16px;
-      font-size: 15px;
-      line-height: 1.5;
-      word-break: break-word;
-      white-space: pre-wrap;
-    }
+.messages{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  background:#050505;
+}
 
-    .bot {
-      align-self: flex-start;
-      color: #00ff66;
-      background: #061b0d;
-      border: 1px solid #00ff66;
-      border-bottom-left-radius: 4px;
-      box-shadow: 0 0 9px #00ff6633;
-    }
+.message{
+  max-width:82%;
+  padding:10px 13px;
+  border-radius:12px;
+  font-size:15px;
+  line-height:1.5;
+  word-wrap:break-word;
+  white-space:pre-wrap;
+}
 
-    .user {
-      align-self: flex-end;
-      color: #ff4040;
-      background: #260606;
-      border: 1px solid #ff2222;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 0 9px #ff222233;
-    }
+.bot{
+  align-self:flex-start;
+  background:#062b1d;
+  color:#fff;
+  border:1px solid #00ff88;
+  border-top-left-radius:3px;
+  box-shadow:0 0 10px #00ff8840;
+}
 
-    .typing {
-      display: none;
-      align-self: flex-start;
-      padding: 7px 12px;
-      color: #00ff66;
-      font-size: 13px;
-      font-style: italic;
-    }
+.user{
+  align-self:flex-end;
+  background:#171717;
+  color:#fff;
+  border:1px solid #ff00ff;
+  border-top-right-radius:3px;
+  box-shadow:0 0 10px #ff00ff40;
+}
 
-    .input-area {
-      display: flex;
-      gap: 8px;
-      padding: 12px;
-      background: #080808;
-      border-top: 1px solid #222;
-    }
+.time{
+  display:block;
+  font-size:10px;
+  color:#aaa;
+  text-align:right;
+  margin-top:4px;
+}
 
-    #messageInput {
-      flex: 1;
-      min-width: 0;
-      padding: 13px 16px;
-      border: 1px solid #00ff66;
-      border-radius: 25px;
-      outline: none;
-      background: #000;
-      color: white;
-      font-size: 15px;
-    }
+.bot .time{
+  color:#00ff88;
+}
 
-    #messageInput::placeholder {
-      color: #777;
-    }
+.typing{
+  display:none;
+  align-self:flex-start;
+  background:#062b1d;
+  color:#00ff88;
+  padding:10px 14px;
+  border-radius:10px;
+  font-size:13px;
+  margin:0 15px 10px;
+  border:1px solid #00ff88;
+  box-shadow:0 0 10px #00ff8840;
+}
 
-    #messageInput:focus {
-      box-shadow: 0 0 12px #00ff6655;
-    }
+.input-area{
+  display:flex;
+  gap:8px;
+  padding:10px;
+  background:#080808;
+  border-top:1px solid #00ffff;
+}
 
-    #sendBtn {
-      width: 48px;
-      height: 48px;
-      border: none;
-      border-radius: 50%;
-      background: #ff2222;
-      color: #fff;
-      font-size: 21px;
-      cursor: pointer;
-      box-shadow: 0 0 14px #ff2222;
-    }
+input{
+  flex:1;
+  border:1px solid #00ffff;
+  outline:none;
+  padding:13px 16px;
+  border-radius:25px;
+  font-size:15px;
+  background:#111;
+  color:white;
+  box-shadow:0 0 8px #00ffff40;
+}
 
-    #sendBtn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+input:focus{
+  border-color:#ff00ff;
+  box-shadow:0 0 12px #ff00ff80;
+}
 
-    .error {
-      color: #ff5555;
-    }
+input::placeholder{
+  color:#777;
+}
 
-    @media (max-width: 600px) {
-      .message {
-        max-width: 90%;
-      }
-    }
-  </style>
+button{
+  width:48px;
+  height:48px;
+  border:none;
+  border-radius:50%;
+  background:#ff003c;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+  box-shadow:0 0 12px #ff003c;
+  transition:.2s;
+}
+
+button:hover{
+  background:#ff0055;
+  box-shadow:0 0 20px #ff003c;
+}
+
+button:active{
+  transform:scale(.95);
+}
+
+@media(max-width:430px){
+  .chat{
+    max-height:none;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="app">
+<div class="chat">
 
-    <div class="header">
+  <div class="header">
+    <div class="avatar">
       <img
-        class="profile"
         src="https://i.ibb.co/G4sHV2cW/20260822-000544.jpg"
-        alt="GPT Profile"
+        alt="Ohid bby Ai"
       >
-
-      <div>
-        <div class="bot-name">Baby GPT</div>
-        <div class="status">Online • AI Assistant</div>
-      </div>
     </div>
 
-    <div class="chat-box" id="chatBox">
-
-      <div class="message bot">
-        হ্যালো! আমি Baby GPT 🤖
-        আমাকে যেকোনো প্রশ্ন করতে পারো।
-      </div>
-
-      <div class="typing" id="typing">
-        Baby GPT লিখছে...
-      </div>
-
+    <div>
+      <h3>Ohid bby Ai</h3>
+      <small>● Online</small>
     </div>
+  </div>
 
-    <form class="input-area" id="chatForm">
-      <input
-        type="text"
-        id="messageInput"
-        placeholder="মেসেজ লিখুন..."
-        autocomplete="off"
-        required
-      >
+  <div class="messages" id="messages">
 
-      <button type="submit" id="sendBtn">➤</button>
-    </form>
+    <div class="message bot">
+      আসসালামু আলাইকুম! 👋
+      <br>আমি Ohid bby Ai 🤖
+      <br>আমাকে কিছু জিজ্ঞেস করো।
+      <span class="time">এখন</span>
+    </div>
 
   </div>
 
-  <script>
-    const API_SERVER_URL =
-      "https://sensui-useless-apis.codersensui.repl.co/api/tools/ai";
+  <div class="typing" id="typing">
+    AI লিখছে...
+  </div>
 
-    const chatForm = document.getElementById("chatForm");
-    const chatBox = document.getElementById("chatBox");
-    const messageInput = document.getElementById("messageInput");
-    const sendBtn = document.getElementById("sendBtn");
-    const typing = document.getElementById("typing");
+  <div class="input-area">
+    <input
+      type="text"
+      id="input"
+      placeholder="মেসেজ লিখুন..."
+      autocomplete="off"
+    >
+    <button id="send">➤</button>
+  </div>
 
-    function addMessage(text, type) {
-      const message = document.createElement("div");
+</div>
 
-      message.className = "message " + type;
-      message.textContent = text;
+<script>
+/* =========================================
+   FREE.AI API KEY
+   এখানে তোমার নিজের API key বসাও
+   ========================================= */
 
-      chatBox.insertBefore(message, typing);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+const API_KEY = "sk-free-92bbdc964fb8b4e77c18c40d5bc6bae07df5b20bc87abb4f";
 
-    function showTyping() {
-      typing.style.display = "block";
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
+const API_URL = "https://api.free.ai/v1/chat/";
+const MODEL = "qwen7b";
 
-    function hideTyping() {
-      typing.style.display = "none";
-    }
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+const messages = document.getElementById("messages");
+const typing = document.getElementById("typing");
 
-    async function sendMessage(question) {
-      addMessage(question, "user");
+function getTime(){
+  return new Date().toLocaleTimeString("bn-BD",{
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
 
-      messageInput.value = "";
-      sendBtn.disabled = true;
-      showTyping();
+function addMessage(text,type){
+  const div = document.createElement("div");
+  div.className = "message " + type;
 
-      try {
-        const apiUrl =
-          API_SERVER_URL +
-          "?question=" +
-          encodeURIComponent(question);
+  const content = document.createElement("span");
+  content.textContent = text;
 
-        const response = await fetch(apiUrl);
+  const time = document.createElement("span");
+  time.className = "time";
+  time.textContent = getTime();
 
-        if (!response.ok) {
-          throw new Error("API server error");
-        }
+  div.appendChild(content);
+  div.appendChild(time);
 
-        const data = await response.json();
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
 
-        hideTyping();
+async function sendMessage(){
 
-        if (data.error) {
-          addMessage(
-            "AI এখন উত্তর দিতে পারছে না। পরে আবার চেষ্টা করো।",
-            "bot"
-          );
-          return;
-        }
+  const text = input.value.trim();
 
-        const answer = data.answer;
+  if(!text) return;
 
-        if (answer) {
-          addMessage(answer, "bot");
-        } else {
-          addMessage(
-            "কোনো উত্তর পাওয়া যায়নি।",
-            "bot"
-          );
-        }
+  addMessage(text,"user");
+  input.value = "";
 
-      } catch (error) {
-        hideTyping();
+  typing.style.display = "block";
+  send.disabled = true;
 
-        addMessage(
-          "API কাজ করছে না। সার্ভার বন্ধ থাকতে পারে অথবা CORS সমস্যা হয়েছে।",
-          "bot"
-        );
+  try{
 
-        console.error("GPT Error:", error);
+    const response = await fetch(API_URL,{
+      method:"POST",
 
-      } finally {
-        sendBtn.disabled = false;
-        messageInput.focus();
-      }
-    }
+      headers:{
+        "Authorization":"Bearer " + API_KEY,
+        "Content-Type":"application/json"
+      },
 
-    chatForm.addEventListener("submit", function(event) {
-      event.preventDefault();
+      body:JSON.stringify({
+        model:MODEL,
 
-      const question = messageInput.value.trim();
-
-      if (question !== "") {
-        sendMessage(question);
-      }
+        messages:[
+          {
+            role:"system",
+            content:"You are Ohid bby Ai. Reply helpfully in Bengali when appropriate."
+          },
+          {
+            role:"user",
+            content:text
+          }
+        ]
+      })
     });
-  </script>
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(
+        data.error?.message || "API request failed"
+      );
+    }
+
+    const reply =
+      data.choices?.[0]?.message?.content;
+
+    addMessage(
+      reply || "দুঃখিত, কোনো উত্তর পাওয়া যায়নি।",
+      "bot"
+    );
+
+  }catch(error){
+
+    addMessage(
+      "API Error: " + error.message,
+      "bot"
+    );
+
+  }finally{
+
+    typing.style.display = "none";
+    send.disabled = false;
+    input.focus();
+
+  }
+}
+
+send.addEventListener("click",sendMessage);
+
+input.addEventListener("keydown",function(e){
+  if(e.key === "Enter"){
+    sendMessage();
+  }
+});
+</script>
 
 </body>
 </html>

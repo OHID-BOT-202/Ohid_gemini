@@ -1,157 +1,278 @@
-
-
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</title>OHID AS A KING</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#eef2f7}
-.app{max-width:430px;margin:20px auto;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 4px 20px #0002}
-.header{background:#1877f2;color:#fff;padding:16px;font-size:19px;font-weight:bold}
-.status{font-size:12px;font-weight:normal;margin-top:4px;opacity:.9}
-.chat{height:430px;padding:14px;overflow-y:auto}
-.msg{max-width:82%;padding:11px 14px;margin:9px 0;border-radius:16px;white-space:pre-wrap;line-height:1.45}
-.bot{background:#e4e6eb;color:#111;border-bottom-left-radius:5px}
-.user{background:#1877f2;color:#fff;margin-left:auto;border-bottom-right-radius:5px}
-.time{font-size:10px;opacity:.6;margin-top:4px;text-align:right}
-.input{display:flex;padding:12px;border-top:1px solid #ddd;gap:8px}
-input{flex:1;padding:12px;border:1px solid #ccc;border-radius:22px;outline:none}
-button{background:#1877f2;color:#fff;border:0;padding:12px 17px;border-radius:22px;cursor:pointer}
-button:disabled{opacity:.6}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SimSimi Baby Chat</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 500px;
+      height: 100vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      background: #050505;
+      border-left: 1px solid #222;
+      border-right: 1px solid #222;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      background: #080808;
+      border-bottom: 1px solid #00ff66;
+      box-shadow: 0 0 15px #00ff6644;
+    }
+
+    .profile {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #00ff66;
+      box-shadow: 0 0 12px #00ff66;
+    }
+
+    .bot-name {
+      color: #00ff66;
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .status {
+      color: #aaa;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 82%;
+      padding: 11px 14px;
+      border-radius: 15px;
+      line-height: 1.5;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    .bot {
+      align-self: flex-start;
+      background: #061b0d;
+      color: #00ff66;
+      border: 1px solid #00ff66;
+      border-bottom-left-radius: 3px;
+      box-shadow: 0 0 8px #00ff6633;
+    }
+
+    .user {
+      align-self: flex-end;
+      background: #260606;
+      color: #ff3333;
+      border: 1px solid #ff2222;
+      border-bottom-right-radius: 3px;
+      box-shadow: 0 0 8px #ff222233;
+    }
+
+    .typing {
+      display: none;
+      align-self: flex-start;
+      color: #00ff66;
+      font-size: 13px;
+      padding: 5px 10px;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      background: #080808;
+      border-top: 1px solid #222;
+    }
+
+    #messageInput {
+      flex: 1;
+      min-width: 0;
+      padding: 13px;
+      border: 1px solid #00ff66;
+      border-radius: 25px;
+      outline: none;
+      background: #000;
+      color: white;
+      font-size: 15px;
+    }
+
+    #messageInput:focus {
+      box-shadow: 0 0 10px #00ff6655;
+    }
+
+    #sendBtn {
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 50%;
+      background: #ff2222;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 12px #ff2222;
+    }
+
+    #sendBtn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="app">
-  <div class="header">
-    🤖 Ohid Auto Respond Web
-    <div class="status" id="status">● Super  Ohid</div>
-  </div>
+  <div class="app">
 
-  <div class="chat" id="chat">
-    <div class="msg bot">
-      🤖 আসসালামু আলাইকুম! 👋
-      Ohid AI চালু হয়েছে।
+    <div class="header">
+      <img
+        class="profile"
+        src="https://i.ibb.co/G4sHV2cW/20260822-000544.jpg"
+        alt="Bot Profile"
+      >
 
-      💬 কিছু লিখে দেখো...
-      যেমন: হ্যালো, !welcome, !rules
-      <div class="time">Bot • এখন</div>
+      <div>
+        <div class="bot-name">Baby SimSimi</div>
+        <div class="status">Online • Auto Reply</div>
+      </div>
     </div>
+
+    <div class="chat-box" id="chatBox">
+      <div class="message bot">
+        হ্যালো! আমি Baby SimSimi 🤖<br>
+        আমাকে কিছু জিজ্ঞেস করো।
+      </div>
+
+      <div class="typing" id="typing">
+        Baby SimSimi লিখছে...
+      </div>
+    </div>
+
+    <form class="input-area" id="chatForm">
+      <input
+        type="text"
+        id="messageInput"
+        placeholder="মেসেজ লিখুন..."
+        autocomplete="off"
+        required
+      >
+
+      <button type="submit" id="sendBtn">➤</button>
+    </form>
+
   </div>
 
-  <div class="input">
-    <input id="message" placeholder="মেসেজ লিখুন..." />
-    <button id="send">➤</button>
-  </div>
-</div>
+  <script>
+    const simsim = "https://simsimi.cyberbot.top";
 
-<script>
-// এখানে নিজের Gemini API key বসাও
-const API_KEY = "AQ.Ab8RN6LoAmASmzM0sUrRIP37OkT4ZUKjo76m42bCZrZv06wvqQ";
+    const chatForm = document.getElementById("chatForm");
+    const messageInput = document.getElementById("messageInput");
+    const sendBtn = document.getElementById("sendBtn");
+    const chatBox = document.getElementById("chatBox");
+    const typing = document.getElementById("typing");
 
-// API key-এর নিরাপত্তার জন্য এটি শুধু demo-তে ব্যবহার করো।
-const MODEL = "gemini-3.6-flash";
+    function addMessage(text, type) {
+      const message = document.createElement("div");
+      message.className = "message " + type;
+      message.textContent = text;
 
-const input = document.getElementById("message");
-const chat = document.getElementById("chat");
-const send = document.getElementById("send");
-const status = document.getElementById("status");
-
-function addMessage(text, type) {
-  const msg = document.createElement("div");
-  msg.className = "msg " + type;
-  msg.textContent = text;
-
-  const time = document.createElement("div");
-  time.className = "time";
-  time.textContent = type === "bot" ? "Bot • এখন" : "You • এখন";
-
-  msg.appendChild(time);
-  chat.appendChild(msg);
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function commandReply(text) {
-  const t = text.toLowerCase().trim();
-
-  if (t === "!welcome" || t === "welcome") {
-    return "╭━━━〔 🌸 WELCOME 〕━━━╮\n\n🎉 Welcome to the group!\n\n👤 New member: @user\n\n💬 সবাই মিলে সুন্দর আড্ডা দাও।\n🤝 একে অপরকে সম্মান করো।\n\n✨ Stay active & have fun!\n\n╰━━━〔 🤖 BOT 〕━━━╯";
-  }
-
-  if (t === "!rules" || t === "rules") {
-    return "📜 Group Rules:\n\n1. সবাইকে সম্মান করো।\n2. Spam করো না।\n3. খারাপ ভাষা ব্যবহার করো না।\n4. অপ্রয়োজনীয় লিংক পাঠিও না।";
-  }
-
-  if (t === "!help" || t === "help") {
-    return "🤖 Commands:\n\n!welcome → Welcome message\n!rules → Group rules\n!help → Command list\n\n💬 সাধারণ মেসেজে Ohid AI উত্তর দেবে।";
-  }
-
-  return null;
-}
-
-async function askGemini(text) {
-  const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/" +
-    MODEL + ":generateContent?key=" + encodeURIComponent(API_KEY),
-    {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        contents: [{
-          parts: [{
-            text:
-              "তুমি একটি বন্ধুসুলভ বাংলা Ohid premium bot। " +
-              "সংক্ষিপ্ত, ভদ্র ও স্বাভাবিক বাংলায় উত্তর দাও। " +
-              "ব্যবহারকারী লিখেছে: " + text
-          }]
-        }]
-      })
+      chatBox.insertBefore(message, typing);
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
-  );
 
-  const data = await response.json();
+    function showTyping() {
+      typing.style.display = "block";
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-  if (!response.ok) {
-    throw new Error(
-      data.error?.message || "Gemini API error"
-    );
-  }
+    function hideTyping() {
+      typing.style.display = "none";
+    }
 
-  return data.candidates?.[0]?.content?.parts?.[0]?.text
-    || "দুঃখিত, এখন উত্তর দিতে পারছি না।";
-}
+    async function sendMessage(text) {
+      addMessage(text, "user");
 
-async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
+      messageInput.value = "";
+      sendBtn.disabled = true;
+      showTyping();
 
-  addMessage(text, "user");
-  input.value = "";
-  send.disabled = true;
-  status.textContent = "● Gemini ভাবছে...";
+      try {
+        const apiUrl =
+          simsim + "/simsimi?text=" + encodeURIComponent(text);
 
-  try {
-    const command = commandReply(text);
-    const reply = command || await askGemini(text);
-    addMessage(reply, "bot");
-  } catch (error) {
-    addMessage("⚠️ API error: " + error.message, "bot");
-  }
+        const response = await fetch(apiUrl);
 
-  status.textContent = "● Ohid Bot Apps";
-  send.disabled = false;
-}
+        if (!response.ok) {
+          throw new Error("API Error");
+        }
 
-send.addEventListener("click", sendMessage);
+        const data = await response.json();
 
-input.addEventListener("keydown", function(e) {
-  if (e.key === "Enter") sendMessage();
-});
-</script>
+        hideTyping();
+
+        const reply =
+          data.success ||
+          data.message ||
+          data.response ||
+          data.reply ||
+          data.text ||
+          "দুঃখিত, এখন উত্তর দিতে পারছি না।";
+
+        addMessage(reply, "bot");
+
+      } catch (error) {
+        hideTyping();
+
+        addMessage(
+          "API কাজ করছে না। কিছুক্ষণ পরে আবার চেষ্টা করো।",
+          "bot"
+        );
+
+        console.error("SimSimi Error:", error);
+
+      } finally {
+        sendBtn.disabled = false;
+        messageInput.focus();
+      }
+    }
+
+    chatForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const text = messageInput.value.trim();
+
+      if (text !== "") {
+        sendMessage(text);
+      }
+    });
+  </script>
 
 </body>
 </html>

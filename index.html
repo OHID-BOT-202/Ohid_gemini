@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SimSimi Baby Chat</title>
+  <title>Baby GPT Chat</title>
 
   <style>
     * {
@@ -12,52 +12,52 @@
 
     body {
       margin: 0;
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
       min-height: 100vh;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
     }
 
     .app {
-      max-width: 500px;
+      width: 100%;
+      max-width: 520px;
       height: 100vh;
       margin: auto;
       display: flex;
       flex-direction: column;
       background: #050505;
-      border-left: 1px solid #222;
-      border-right: 1px solid #222;
+      overflow: hidden;
     }
 
     .header {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 15px;
+      padding: 14px;
       background: #080808;
       border-bottom: 1px solid #00ff66;
-      box-shadow: 0 0 15px #00ff6644;
+      box-shadow: 0 0 18px #00ff6644;
     }
 
     .profile {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       object-fit: cover;
       border: 2px solid #00ff66;
-      box-shadow: 0 0 12px #00ff66;
+      box-shadow: 0 0 15px #00ff66;
     }
 
     .bot-name {
       color: #00ff66;
-      font-size: 19px;
+      font-size: 20px;
       font-weight: bold;
     }
 
     .status {
+      margin-top: 4px;
       color: #aaa;
       font-size: 12px;
-      margin-top: 4px;
     }
 
     .chat-box {
@@ -67,41 +67,44 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      scroll-behavior: smooth;
     }
 
     .message {
-      max-width: 82%;
+      max-width: 85%;
       padding: 11px 14px;
-      border-radius: 15px;
-      line-height: 1.5;
+      border-radius: 16px;
       font-size: 15px;
-      word-wrap: break-word;
+      line-height: 1.5;
+      word-break: break-word;
+      white-space: pre-wrap;
     }
 
     .bot {
       align-self: flex-start;
-      background: #061b0d;
       color: #00ff66;
+      background: #061b0d;
       border: 1px solid #00ff66;
-      border-bottom-left-radius: 3px;
-      box-shadow: 0 0 8px #00ff6633;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 0 9px #00ff6633;
     }
 
     .user {
       align-self: flex-end;
+      color: #ff4040;
       background: #260606;
-      color: #ff3333;
       border: 1px solid #ff2222;
-      border-bottom-right-radius: 3px;
-      box-shadow: 0 0 8px #ff222233;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 0 9px #ff222233;
     }
 
     .typing {
       display: none;
       align-self: flex-start;
+      padding: 7px 12px;
       color: #00ff66;
       font-size: 13px;
-      padding: 5px 10px;
+      font-style: italic;
     }
 
     .input-area {
@@ -115,7 +118,7 @@
     #messageInput {
       flex: 1;
       min-width: 0;
-      padding: 13px;
+      padding: 13px 16px;
       border: 1px solid #00ff66;
       border-radius: 25px;
       outline: none;
@@ -124,8 +127,12 @@
       font-size: 15px;
     }
 
+    #messageInput::placeholder {
+      color: #777;
+    }
+
     #messageInput:focus {
-      box-shadow: 0 0 10px #00ff6655;
+      box-shadow: 0 0 12px #00ff6655;
     }
 
     #sendBtn {
@@ -134,15 +141,25 @@
       border: none;
       border-radius: 50%;
       background: #ff2222;
-      color: white;
-      font-size: 20px;
+      color: #fff;
+      font-size: 21px;
       cursor: pointer;
-      box-shadow: 0 0 12px #ff2222;
+      box-shadow: 0 0 14px #ff2222;
     }
 
     #sendBtn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+
+    .error {
+      color: #ff5555;
+    }
+
+    @media (max-width: 600px) {
+      .message {
+        max-width: 90%;
+      }
     }
   </style>
 </head>
@@ -155,24 +172,26 @@
       <img
         class="profile"
         src="https://i.ibb.co/G4sHV2cW/20260822-000544.jpg"
-        alt="Bot Profile"
+        alt="GPT Profile"
       >
 
       <div>
-        <div class="bot-name">Baby SimSimi</div>
-        <div class="status">Online • Auto Reply</div>
+        <div class="bot-name">Baby GPT</div>
+        <div class="status">Online • AI Assistant</div>
       </div>
     </div>
 
     <div class="chat-box" id="chatBox">
+
       <div class="message bot">
-        হ্যালো! আমি Baby SimSimi 🤖<br>
-        আমাকে কিছু জিজ্ঞেস করো।
+        হ্যালো! আমি Baby GPT 🤖
+        আমাকে যেকোনো প্রশ্ন করতে পারো।
       </div>
 
       <div class="typing" id="typing">
-        Baby SimSimi লিখছে...
+        Baby GPT লিখছে...
       </div>
+
     </div>
 
     <form class="input-area" id="chatForm">
@@ -190,16 +209,18 @@
   </div>
 
   <script>
-    const simsim = "https://simsimi.cyberbot.top";
+    const API_SERVER_URL =
+      "https://sensui-useless-apis.codersensui.repl.co/api/tools/ai";
 
     const chatForm = document.getElementById("chatForm");
+    const chatBox = document.getElementById("chatBox");
     const messageInput = document.getElementById("messageInput");
     const sendBtn = document.getElementById("sendBtn");
-    const chatBox = document.getElementById("chatBox");
     const typing = document.getElementById("typing");
 
     function addMessage(text, type) {
       const message = document.createElement("div");
+
       message.className = "message " + type;
       message.textContent = text;
 
@@ -216,8 +237,8 @@
       typing.style.display = "none";
     }
 
-    async function sendMessage(text) {
-      addMessage(text, "user");
+    async function sendMessage(question) {
+      addMessage(question, "user");
 
       messageInput.value = "";
       sendBtn.disabled = true;
@@ -225,37 +246,48 @@
 
       try {
         const apiUrl =
-          simsim + "/simsimi?text=" + encodeURIComponent(text);
+          API_SERVER_URL +
+          "?question=" +
+          encodeURIComponent(question);
 
         const response = await fetch(apiUrl);
 
         if (!response.ok) {
-          throw new Error("API Error");
+          throw new Error("API server error");
         }
 
         const data = await response.json();
 
         hideTyping();
 
-        const reply =
-          data.success ||
-          data.message ||
-          data.response ||
-          data.reply ||
-          data.text ||
-          "দুঃখিত, এখন উত্তর দিতে পারছি না।";
+        if (data.error) {
+          addMessage(
+            "AI এখন উত্তর দিতে পারছে না। পরে আবার চেষ্টা করো।",
+            "bot"
+          );
+          return;
+        }
 
-        addMessage(reply, "bot");
+        const answer = data.answer;
+
+        if (answer) {
+          addMessage(answer, "bot");
+        } else {
+          addMessage(
+            "কোনো উত্তর পাওয়া যায়নি।",
+            "bot"
+          );
+        }
 
       } catch (error) {
         hideTyping();
 
         addMessage(
-          "API কাজ করছে না। কিছুক্ষণ পরে আবার চেষ্টা করো।",
+          "API কাজ করছে না। সার্ভার বন্ধ থাকতে পারে অথবা CORS সমস্যা হয়েছে।",
           "bot"
         );
 
-        console.error("SimSimi Error:", error);
+        console.error("GPT Error:", error);
 
       } finally {
         sendBtn.disabled = false;
@@ -266,10 +298,10 @@
     chatForm.addEventListener("submit", function(event) {
       event.preventDefault();
 
-      const text = messageInput.value.trim();
+      const question = messageInput.value.trim();
 
-      if (text !== "") {
-        sendMessage(text);
+      if (question !== "") {
+        sendMessage(question);
       }
     });
   </script>
